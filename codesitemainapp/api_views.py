@@ -130,15 +130,15 @@ class KetjuViewSet(viewsets.ModelViewSet):
         serializer.save()
 
 
-
+# Foorumin vastaukset, korjattu testien perusteella
 class VastausViewSet(viewsets.ModelViewSet):
     queryset = Vastaus.objects.all()
     serializer_class = VastausSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(kayttaja=self.request.user)
-        return super().perform_create(serializer)
+        serializer.save(replier=self.request.user)
+
 
 #Notes osio
 class NoteViewSet(viewsets.ModelViewSet):
