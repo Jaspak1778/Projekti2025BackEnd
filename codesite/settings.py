@@ -32,19 +32,13 @@ ALLOWED_HOSTS = [
     'codesitebe-efgshggehucfdvhq.swedencentral-01.azurewebsites.net'
     ]  #muutetttu * ---> tarkemmat määritykset
 
-
-
-#jos CAC == True niin tulee olla määritetyt originit
-CSRF_TRUSTED_ORIGINS = ['https://*.azurewebsites.net',
-                        'https://codesitebe-efgshggehucfdvhq.swedencentral-01.azurewebsites.net',     #azure täytyy olla
-                        'http://localhost:3000']
-
-#CORS_ALLOW_ALL_ORIGINS = True
+# #jos CAC == True niin tulee olla määritetyt originit
+# #CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost:5173",
-    "https://codesitebe-efgshggehucfdvhq.swedencentral-01.azurewebsites.net",
-]
+    "http://localhost:5173",
+     "https://codesitebe-efgshggehucfdvhq.swedencentral-01.azurewebsites.net",
+ ]
 
 
 CORS_ALLOW_CREDENTIALS = True
@@ -53,21 +47,23 @@ CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
+    'rest_framework_simplejwt',
+    'rest_framework',
+    'codesitemainapp',
+    'codesite',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'codesitemainapp',
-    'rest_framework',
-    'corsheaders',
-    'codesite',
-       
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',                 #paras yhteensopivuus kun ylimpänä
+     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -147,54 +143,33 @@ USE_I18N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-# varmista polut
-STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+STATIC_URL = 'static/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'codesitemainapp.CustomUser'
 
-
-
-#Autentikaatio asetukset tähän alle
-#cookies
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'codesitemainapp.authentication.CookieJWTAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication', #jos ei tarvita csrf tokenia
+        'codesitemainapp.authentication.CookieJWTAuthentication'
+    )
+
 }
 
-#token jwt
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Käyttäjän tokenin voimassaoloaika
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),     # Refresh-tokenin voimassaoloaika
-    'ROTATE_REFRESH_TOKENS': True,                  # Luo uusi refresh-token käytettäessä
-    'BLACKLIST_AFTER_ROTATION': True,               # Vanha refresh-token mitätöityy
-    'AUTH_HEADER_TYPES': ('Bearer',),               # Käytä "Bearer" -headeria
-    
-    #lisätään muutama määritys 
-    'AUTH_COOKIE': 'access_token',      # Evästeen nimi
-    'AUTH_COOKIE_HTTP_ONLY': True,      # Vain HTTP-käyttö (ei JS)
-    'AUTH_COOKIE_SECURE': True,         # HTTPS-vaatimus
-    'AUTH_COOKIE_SAMESITE': 'None',     # Tarvitaan, jos React pyytää cross-origin localhost ajossa vaihda 'Lax'
-}   
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+}
 
-
-#Autentikaatio asetus osion loppu
-
-#Lisä asetukset 1 start CORS CSRF COOKIES  
-CSRF_COOKIE_HTTPONLY = False  # Salli JavaScriptin käyttää CSRF-evästettä
-CSRF_COOKIE_SECURE = True  # Pakottaa HTTPS-yhteyden (Azure)
-CORS_ALLOW_CREDENTIALS = True  # Salli evästeet ja JWT-kirjautuminen
-CSRF_COOKIE_SAMESITE = 'None'
-#Lisä asetukset 1 end
-
-#Lisä asetukset 2 start
-SESSION_COOKIE_SAMESITE = 'None'  # Tarvitaan cross-origin-pyynnöissä
-SESSION_COOKIE_SECURE = True  # Sama HTTPS-vaatimus sessioevästeille
-#Lisä asetukset 2 end
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
