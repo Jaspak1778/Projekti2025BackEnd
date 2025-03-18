@@ -130,7 +130,7 @@ class VastausViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(kayttaja=self.request.user)
+        serializer.save(replier=self.request.user)
 
 #Notes osio
 class NoteViewSet(viewsets.ModelViewSet):
