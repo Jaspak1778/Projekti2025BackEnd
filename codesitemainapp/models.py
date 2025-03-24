@@ -13,9 +13,14 @@ class CustomUser(AbstractUser):
     
     objects = CustomUserManager()
 
+    def __str__(self):
+        return str(self.email) 
+
 # Foorumi
 class Aihealue(models.Model):  
     header = models.TextField()
+
+
 
 class Ketju(models.Model):
     header = models.TextField()
@@ -25,12 +30,18 @@ class Ketju(models.Model):
     updated = models.DateTimeField(auto_now=True)
     aihealue = models.ForeignKey(Aihealue, on_delete=models.CASCADE, related_name="threads")
 
+    def __str__(self):
+        return self.header   #Palauttaa otsikon object() sijaan
+
 class Vastaus(models.Model):  
     content = models.TextField()
     replier = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="forum_replies") #jos käyttäjä poistetaan niin ks käyttäjän julkaisut poistetaan.
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     ketju = models.ForeignKey(Ketju, on_delete=models.CASCADE, related_name="replies")  #jos alkuperäinen julkaisu poistetaan sen julkaisun vastaukset poistetaan.
+
+    def __str__(self):
+        return self.content[:35]   #Palauttaa otsikon object() sijaan ja ensimmäiset 35 merkkiä (preview)
 #Notes osio
 class Tags(models.TextChoices):
     C_SHARP = 'csharp', 'C#'

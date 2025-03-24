@@ -115,12 +115,19 @@ class AihealueViewSet(viewsets.ModelViewSet):
 
 # Foorumin ketjut jotka lisätään aihealueen alle
 class KetjuViewSet(viewsets.ModelViewSet):
-    queryset = Ketju.objects.all()
+    queryset = Ketju.objects.all()  # Tämä määrittää, mitä tietoja haetaan
     serializer_class = KetjuSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)   #asettaa kirjautuneen käyttäjän luojaksi 
+    def get_queryset(self):
+        queryset = Ketju.objects.all()
+        
+        # Suodatetaan 'aihealue' parametrin mukaan
+        aihealue = self.request.query_params.get('aihealue', None)
+        if aihealue:
+            queryset = queryset.filter(aihealue=aihealue)
+        
+        return queryset
 
 
 #Ketjujen yksittäiset vastaukset (reply)
