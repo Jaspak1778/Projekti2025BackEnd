@@ -14,7 +14,8 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return str(self.email) 
+        return str(self.email)
+    
 
 # Foorumi
 class Aihealue(models.Model):  
