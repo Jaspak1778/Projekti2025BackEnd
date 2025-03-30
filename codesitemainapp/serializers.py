@@ -10,8 +10,8 @@ class CustomUserSerializer(ModelSerializer):
     
     class Meta:
         model = CustomUser
-       #fields =("id", "email", "username")
-        fields =("__all__")
+        fields =("id", "email", "id", "is_superuser", "is_staff", "username")
+        #fields =("__all__")
 
 class RegisterUserSerializer(ModelSerializer):
     class Meta:
