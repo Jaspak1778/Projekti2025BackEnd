@@ -126,7 +126,7 @@ class PasswordResetAPIView(APIView):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
 
             # Salasanan palautuslinkki
-            reset_link = f"http://127.0.0.1:8000/reset/{uid}/{token}/"   #muuta azureen sopivaksi
+            reset_link = f"https://projekti2025backend-e0dubhd7e5h6akcw.swedencentral-01.azurewebsites.net/reset/{uid}/{token}/"   #muuta azureen sopivaksi
             mail_subject = 'Salasanan palautuspyyntö'
             message = render_to_string('reset_password_email.html', {
                 'user': user,
@@ -155,7 +155,7 @@ class AihealueViewSet(viewsets.ModelViewSet):
 
 # Foorumin ketjut jotka lisätään aihealueen alle
 class KetjuViewSet(viewsets.ModelViewSet):
-    queryset = Ketju.objects.all()  # Tämä määrittää, mitä tietoja haetaan
+    queryset = Ketju.objects.all().order_by('-created') # Tämä määrittää, mitä tietoja haetaan
     serializer_class = KetjuSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
