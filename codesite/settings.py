@@ -173,6 +173,7 @@ SIMPLE_JWT = {
      "BLACKLIST_AFTER_ROTATION": False,
  }
 
+
 #testiasetukset
 # SIMPLE_JWT = {
 #     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
@@ -198,3 +199,13 @@ EMAIL_HOST_PASSWORD = 'eicvbzjjtsmildgt'
 
 # Authentication
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
+
+# Käytetään SQLitea testauksen aikana, jotta vältetään SQL Serverin token_id -ongelmat,  Valter Backström 
+import sys
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
