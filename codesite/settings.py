@@ -26,23 +26,25 @@ DEBUG = os.getenv("DEBUG")
 
 # SECURITY WARNING: In production, allow only those domains which you trust.
 #REST CORS ja sallitut domainit
-ALLOWED_HOSTS = [
-    'localhost', 
-    '127.0.0.1',
-    'codesitebe-efgshggehucfdvhq.swedencentral-01.azurewebsites.net'
-    ]  #muutetttu * ---> tarkemmat määritykset
+# ALLOWED_HOSTS = [
+#     'localhost', 
+#     '127.0.0.1',
+#     'codesitebe-efgshggehucfdvhq.swedencentral-01.azurewebsites.net',
+#     'blue-wave-09f686903.6.azurestaticapps.net'
+#     ]  #muutetttu * ---> tarkemmat määritykset
 
-# #jos CAC == True niin tulee olla määritetyt originit
-# #CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = ['*']
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-     "https://codesitebe-efgshggehucfdvhq.swedencentral-01.azurewebsites.net",
- ]
+# #jos CAC == True niin tulee olla määritetyt originit ?
+CORS_ALLOW_ALL_ORIGINS = True
 
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#      "https://codesitebe-efgshggehucfdvhq.swedencentral-01.azurewebsites.net",
+#      "https://blue-wave-09f686903.6.azurestaticapps.net"
+#  ]
 
 CORS_ALLOW_CREDENTIALS = True
-
 
 # Application definition
 
@@ -165,16 +167,40 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
-}
+     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+     "ROTATE_REFRESH_TOKENS": False,
+     "BLACKLIST_AFTER_ROTATION": False,
+ }
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
 
-# Käytetään SQLitea testauksen aikana, jotta vältetään SQL Serverin token_id -ongelmat
+#testiasetukset
+# SIMPLE_JWT = {
+#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+#     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+#     "ROTATE_REFRESH_TOKENS": False,
+#     "BLACKLIST_AFTER_ROTATION": False,
+#     "AUTH_COOKIE": "access_token",
+#     "AUTH_COOKIE_SECURE": False,  # Muuta True tuotantoon
+#     "AUTH_COOKIE_HTTP_ONLY": True,
+#     "AUTH_COOKIE_PATH": "/",
+#     "AUTH_COOKIE_SAMESITE": "None",
+#     "AUTH_COOKIE_MAX_AGE": 86400,
+# }
+
+#salasanan palautus
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "pekkala.jani@gmail.com"
+EMAIL_HOST_PASSWORD = 'eicvbzjjtsmildgt'
+
+# Authentication
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
+
+# Käytetään SQLitea testauksen aikana, jotta vältetään SQL Serverin token_id -ongelmat,  Valter Backström 
 import sys
 if 'test' in sys.argv:
     DATABASES = {
