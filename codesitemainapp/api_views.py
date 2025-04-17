@@ -127,8 +127,7 @@ class PasswordResetAPIView(APIView):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
 
             # Salasanan palautuslinkki
-            reset_link = f"http://localhost:5173/reset-password-form/{uid}/{token}/"   #muuta azureen sopivaksi
-            #reset_link = f"https://blue-wave-09f686903.6.azurestaticapps.net/reset-password/{uid}/{token}/"
+            reset_link = f"https://blue-wave-09f686903.6.azurestaticapps.net/reset-password-form/{uid}/{token}/"
 
             mail_subject = 'Salasanan palautuspyyntö'
             message = render_to_string('reset_password_email.html', {
