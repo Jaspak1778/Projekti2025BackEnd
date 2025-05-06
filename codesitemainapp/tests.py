@@ -5,58 +5,58 @@ from .models import Aihealue, Ketju, Vastaus, Notes, Tags
 User = get_user_model()
 
 
-# Tests for the Forum models
+# Forum mallien testit
 class ForumModelTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='valter',
-            email='valter@example.com',
+            username='Teppo',
+            email='testaaja@example.com',
             password='test1234'
         )
-        self.aihealue = Aihealue.objects.create(header="Django stuff")
+        self.aihealue = Aihealue.objects.create(header="Python")
         self.ketju = Ketju.objects.create(
-            header="How to use Django?",
+            header="Testi kysymys?",
             content="Can someone help me?",
             author=self.user,
             aihealue=self.aihealue
         )
         self.vastaus = Vastaus.objects.create(
-            content="Sure! Here's how...",
+            content="Yep näin",
             replier=self.user,
             ketju=self.ketju
         )
 
     def test_ketju_creation(self):
-        self.assertEqual(self.ketju.header, "How to use Django?")
-        self.assertEqual(self.ketju.author.username, "valter")
-        self.assertEqual(self.ketju.aihealue.header, "Django stuff")
+        self.assertEqual(self.ketju.header, "Testi kysymys?")
+        self.assertEqual(self.ketju.author.username, "Teppo")
+        self.assertEqual(self.ketju.aihealue.header, "Python")
 
     def test_vastaus_related_to_ketju(self):
         self.assertEqual(self.vastaus.ketju, self.ketju)
         self.assertEqual(self.vastaus.replier, self.user)
 
 
-# Tests for Notes model
+# Muistiinpanojen testit
 class NotesModelTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username='valter',
-            email='valter@example.com',
+            username='Teppo',
+            email='testaaja@example.com',
             password='test1234'
         )
         self.note = Notes.objects.create(
             owner=self.user,
-            header="React tips",
-            content="Use components wisely.",
+            header="React",
+            content="Komponentit",
             tags=Tags.REACT
         )
 
     def test_note_creation_and_str(self):
-        self.assertEqual(str(self.note), "React tips")
+        self.assertEqual(str(self.note), "React")
         self.assertEqual(self.note.tags, Tags.REACT)
-        self.assertEqual(self.note.owner.username, "valter")
+        self.assertEqual(self.note.owner.username, "Teppo")
 
 
 from rest_framework.test import APITestCase, APIClient
@@ -64,45 +64,45 @@ from rest_framework import status
 from django.urls import reverse
 
 
-# API Tests for Ketju (Thread)
+# API Testit, Ketju (Thread)
 class KetjuAPITests(APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username="valter_api",
-            email="valter_api@example.com",
+            username="testaaja_api",
+            email="testaaja_api@example.com",
             password="testpass"
         )
-        self.aihealue = Aihealue.objects.create(header="Testing area")
+        self.aihealue = Aihealue.objects.create(header="Testing")
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
     def test_create_ketju(self):
         url = reverse('ketju-list')
         data = {
-            'header': 'Test from API',
-            'content': 'Creating a Ketju via API test.',
+            'header': 'API testi',
+            'content': 'Luo ketju API testin kautta',
             'author': self.user.id,
             'aihealue': self.aihealue.id
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['header'], 'Test from API')
+        self.assertEqual(response.data['header'], 'API testi')
 
     def test_list_ketjut(self):
         Ketju.objects.create(
-            header='Listable Thread',
-            content='Testing GET',
+            header='Luettelo',
+            content='Testaa GET',
             author=self.user,
             aihealue=self.aihealue
         )
         url = reverse('ketju-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(any(k['header'] == 'Listable Thread' for k in response.data))
+        self.assertTrue(any(k['header'] == 'Luettelo' for k in response.data))
 
 
-# API Tests for Vastaus (Reply)
+# API Testit,Vastaus (Reply)
 class VastausAPITests(APITestCase):
 
     def setUp(self):
@@ -111,10 +111,10 @@ class VastausAPITests(APITestCase):
             email="reply@example.com",
             password="testpass"
         )
-        self.aihealue = Aihealue.objects.create(header="Replies Area")
+        self.aihealue = Aihealue.objects.create(header="Vastaukset")
         self.ketju = Ketju.objects.create(
-            header="Thread for reply",
-            content="Let's reply here",
+            header="Vastaus ketju",
+            content="Vastaus",
             author=self.user,
             aihealue=self.aihealue
         )
@@ -124,16 +124,16 @@ class VastausAPITests(APITestCase):
     def test_create_vastaus(self):
         url = reverse('vastaus-list')
         data = {
-            'content': "Here's my reply via API",
+            'content': "Vastaus APIn kautta",
             'replier': self.user.id,
             'ketju': self.ketju.id
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['content'], "Here's my reply via API")
+        self.assertEqual(response.data['content'], "Vastaus APIn kautta")
 
 
-# Unauthenticated access test
+# Testi jos ei ole kirjautunut
 class UnauthenticatedAccessTest(APITestCase):
 
     def setUp(self):
@@ -144,8 +144,8 @@ class UnauthenticatedAccessTest(APITestCase):
         )
         self.aihealue = Aihealue.objects.create(header="Restricted")
         self.ketju = Ketju.objects.create(
-            header="Auth test thread",
-            content="Content",
+            header="Testi kejua",
+            content="Testaa",
             author=self.user,
             aihealue=self.aihealue
         )
@@ -153,7 +153,7 @@ class UnauthenticatedAccessTest(APITestCase):
     def test_unauthenticated_vastaus_post(self):
         url = reverse('vastaus-list')
         data = {
-            'content': "Trying to reply without login",
+            'content': "Yritetään vastata ilman kirjautumista",
             'replier': self.user.id,
             'ketju': self.ketju.id
         }
@@ -161,30 +161,30 @@ class UnauthenticatedAccessTest(APITestCase):
         self.assertEqual(response.status_code, 401)
 
 
-# Notes API test: user-specific notes
+# Käyttäjän muistiot
 class NotesAPITests(APITestCase):
 
     def setUp(self):
         self.user1 = User.objects.create_user(
-            username="user1",
-            email="user1@example.com",
+            username="Teppo1",
+            email="Teppo1@example.com",
             password="pass1"
         )
         self.user2 = User.objects.create_user(
-            username="user2",
-            email="user2@example.com",
+            username="Tero2",
+            email="Tero2@example.com",
             password="pass2"
         )
 
         Notes.objects.create(
             owner=self.user1,
-            header="Note from user1",
+            header="Teppo muistio",
             content="Private",
             tags=Tags.PYTHON
         )
         Notes.objects.create(
             owner=self.user2,
-            header="Note from user2",
+            header="Teppo muistio 2",
             content="Hidden",
             tags=Tags.REACT
         )

@@ -150,9 +150,10 @@ class PasswordResetConfirmAPIView(APIView):
             return Response({"message": "Salasana vaihdettu onnistuneesti."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CustomPasswordResetCompleteView(PasswordResetCompleteView):
-    def get(self, request, *args, **kwargs):
-        messages.add_message(request, messages.SUCCESS, 'Salasanan palautus oli onnistunut. Voit kirjautua sisään uudella salasanallasi.')
+#Ei tarvita, jätetty optioksi jos halutaan käyttää Djangon omia templateja
+# class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+#     def get(self, request, *args, **kwargs):
+#         messages.add_message(request, messages.SUCCESS, 'Salasanan palautus oli onnistunut. Voit kirjautua sisään uudella salasanallasi.')
 
           
 
