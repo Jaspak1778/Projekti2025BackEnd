@@ -1,14 +1,11 @@
-from django.shortcuts import render
 from rest_framework.generics import RetrieveUpdateAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.request import Request
 from rest_framework import status, viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.exceptions import InvalidToken
-from rest_framework.permissions import IsAuthenticated, AllowAny, BasePermission, IsAdminUser
 
 from .permissions import IsAdminOrSuperuser  # Tuotu erillisestä permissions-tiedostosta
 from .models import Aihealue, Ketju, Vastaus, Notes, CustomUser
@@ -21,11 +18,8 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 
-from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator  #lyhyt kestoinen palautukseen tarkoitettu auth token
-from django.contrib.auth.views import PasswordResetCompleteView
-from django.shortcuts import redirect
-from django.contrib import messages
+
 
 # API Controllerit
 
@@ -127,7 +121,7 @@ class PasswordResetAPIView(APIView):
             uid = urlsafe_base64_encode(force_bytes(user.pk))
 
             # Salasanan palautuslinkki
-            reset_link = f"https://blue-wave-09f686903.6.azurestaticapps.net/reset-password-form/{uid}/{token}/"
+            reset_link = f"https://blue-wave-09f686903.6.azurestaticapps.net/reset-password-form/{uid}/{token}/" #reactin http palvelin
 
             mail_subject = 'Salasanan palautuspyyntö'
             message = render_to_string('reset_password_email.html', {

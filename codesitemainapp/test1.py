@@ -1,3 +1,5 @@
+#CRUD testit Walter
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from .models import Aihealue, Ketju, Vastaus, Notes, Tags

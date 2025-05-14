@@ -1,4 +1,4 @@
-#Asetukset, lisä huomautukset tiedoston lopussa.
+#Asetukset, lisä huomautukset tiedoston lopussa. Jani
 import os
 from pathlib import Path
 from datetime import timedelta
