@@ -1,7 +1,7 @@
 from django.contrib.auth.models import BaseUserManager
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, password=None, **extra_fields): #**extra fields dict mahdollistaa määrittelemättömät kentät esim. etunimi , sukunimi
         if not email:
             raise ValueError("Email is required.")
         email = self.normalize_email(email)
