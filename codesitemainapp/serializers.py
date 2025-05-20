@@ -19,7 +19,7 @@ class RegisterUserSerializer(ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ("email", "username", "password")
-        extra_kwargs = {"password":{"write_only":True}}
+        extra_kwargs = {"password":{"write_only":True}}   #Suojaa salasanaa eli sitä ei tuoda responseen HTTP pyynnöissä, lisää turvallisuutta
         
     def create(self, validated_data):
         user = CustomUser.objects.create_user(**validated_data)

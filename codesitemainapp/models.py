@@ -7,7 +7,7 @@ from django.conf import settings
 #CustomUserModel
 
 class CustomUser(AbstractUser):
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'email'   #override : ylikirjoitettu käyttäjätunnus kenttä joka peritty Abstract User mallista
     email = models.EmailField(unique=True)
     REQUIRED_FIELDS = []
     

@@ -42,7 +42,7 @@ class LoginView(APIView):
             user = serializer.validated_data
             refresh = RefreshToken.for_user(user)
             access_token = str(refresh.access_token)
-            
+            #http response objekti  
             response = Response({
                 "user": CustomUserSerializer(user).data},
                                 status=status.HTTP_200_OK)
@@ -72,15 +72,13 @@ class LogoutView(APIView):
                 refresh.blacklist()
             except Exception as e:
                 return Response({"error":"Error invalidating token:" + str(e) }, status=status.HTTP_400_BAD_REQUEST)
-        
+            #http response objekti        
         response = Response({"message": "Successfully logged out!"}, status=status.HTTP_200_OK)
-
         response.set_cookie(key="access_token", value="", httponly=True, secure=True, samesite="None", max_age=0)
         response.set_cookie(key="refresh_token", value="", httponly=True, secure=True, samesite="None", max_age=0)
-        
-        #pakotetaan selain poistamaan kaikki
-        response["Cache-Control"] = "no-store, no-cache, must-revalitade, max-age=0"
-        response["Pragma"] = "no-cache"
+            #pakotetaan selain poistamaan kaikki
+        response["Cache-Control"] = "no-store, no-cache, must-revalitade, max-age=0" #http otsakkeet : response["Header-Name"] = "arvo",
+        response["Pragma"] = "no-cache"   #yhteensopivuus vanhemmille selaimille
         response["Expires"] = "0"
         
         return response     
