@@ -74,7 +74,7 @@ class LogoutView(APIView):
                 return Response({"error":"Error invalidating token:" + str(e) }, status=status.HTTP_400_BAD_REQUEST)
             #http response objekti        
         response = Response({"message": "Successfully logged out!"}, status=status.HTTP_200_OK)
-        response.set_cookie(key="access_token", value="", httponly=True, secure=True, samesite="None", max_age=0)
+        response.set_cookie(key="access_token", value="", httponly=True, secure=True, samesite="None", max_age=0)  #Set-Cookie: access_token=; Max-Age=0; Path=/; Secure; HttpOnly; SameSite=None
         response.set_cookie(key="refresh_token", value="", httponly=True, secure=True, samesite="None", max_age=0)
             #pakotetaan selain poistamaan kaikki
         response["Cache-Control"] = "no-store, no-cache, must-revalitade, max-age=0" #http otsakkeet : response["Header-Name"] = "arvo",

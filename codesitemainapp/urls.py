@@ -7,6 +7,8 @@ from django.contrib.auth import views as auth_views
 
 
 # REST API reitit objektien hakuun JSON muodossa, määritetty api_views tiedostossa.
+
+#viewset DRF Kirjasto joka luo CRUD toiminnallisuudet seuraaville päätepisteille
 router = DefaultRouter()
 router.register(r'Aiheet',AihealueViewSet )
 router.register(r'Ketjut',KetjuViewSet )

@@ -32,7 +32,7 @@ class Ketju(models.Model):
     aihealue = models.ForeignKey(Aihealue, on_delete=models.CASCADE, related_name="threads")
 
     def __str__(self):
-        return self.header   #Palauttaa otsikon object() sijaan
+        return self.header   #self.header Palauttaa otsikon object() sijaan
 
 class Vastaus(models.Model):  
     content = models.TextField()
